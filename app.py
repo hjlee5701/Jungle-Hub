@@ -93,9 +93,9 @@ def my_list():
 
 
 #파티 페이지
-@app.route('/resistparty', methods=['GET'])
+@app.route('/party/register', methods=['GET'])
 def getResistForm():
-    return render_template('makeForm.html')
+    return render_template('partyRegister.html')
 
 #파티 생성 함수
 @app.route('/resistparty', methods=['POST'])
