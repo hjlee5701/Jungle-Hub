@@ -90,10 +90,12 @@ def party_list():
     print(partyList)
     return render_template('partyList.html', partyList=partyList)
 
-
+#회원 파티 리스트
 @app.route('/myparty', methods=['GET'])
 def my_list():
-    myPartyList = list(userdb.partyList.find({'userId': 'ididid'}, {'_id': False}))
+    # userInfo = userdb.userList.find_one({'userId': 'ididid'},{'_id':False})
+    # myPartyList = list(userdb.partyList.find({'userId': userInfo.userId},{'_id':False}))
+    myPartyList = list(userdb.userList.find({'userId': 'ididid'},{'_id':False}))
     return render_template('myParty.html', myPartyList=myPartyList)
 
 
@@ -137,6 +139,10 @@ def getPartyDetail():
     return render_template('partyDetail.html', people=1)
 
 
+#파티 상세
+@app.route('/partyDetail', methods=['GET'])
+def party_detail():
+    return render_template('partyDetail.html')
 if __name__ == '__main__':
     app.run()
     # result = list(db.partyList.find({}, {'_id': 0}))
