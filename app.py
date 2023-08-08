@@ -78,5 +78,9 @@ def login():
     print(refresh_token)
     return resp
 
+@app.route('/party', methods=['GET'])
+def party_list():
+    return render_template('partyList.html')
+
 if __name__ == '__main__':
     app.run()

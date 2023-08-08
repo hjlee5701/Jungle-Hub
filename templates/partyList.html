@@ -1,43 +1,65 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>partylist</title>
-    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.4/css/bulma.min.css"/>
-    <style>
-        .login_box {
-            margin: 0 auto;
-            width: 600px;
-
-        }
-        .list{
-        }
-
-        .wrap {
-            width: 600px;
-            margin: 0 auto;
-        }
-
-    </style>
-
-</head>
-<body>
-<div class="wrap">
-    <div>
-
-    </div>
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-  <a class="pagination-previous">Previous</a>
-  <a class="pagination-next">Next page</a>
-  <ul class="pagination-list">
-
-    <li><a class="pagination-link is-current" aria-label="Page 1" aria-current="page">1</a></li>
-    <li><a class="pagination-link" aria-label="Goto page 2">2</a></li>
-    <li><span class="pagination-ellipsis">&hellip;</span></li>
-    <li><a class="pagination-link" aria-label="Goto page 3">3</a></li>
-  </ul>
-</nav>
-</div>
-
-
-</body>
-</html>
+{% extends "base.html" %}
+    {% block content %}
+        <div class="wrap container mx-auto">      
+            <div class="relative overflow-x-auto">
+                <h1 class="my-6 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+                    Jungle Party
+                </h1>
+                <hr>
+                <br>
+                <div class="flex mt-6 space-x-5 sm:justify-end md:mt-0">
+                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-50 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option default>분류</option>
+                        <option>마감 임박</option>
+                        <option>마지막 1명</option>
+                    </select> 
+                </div>
+                <br>
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                NO
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                제목
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                인원
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                파티장
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                모집기한
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-6 py-4">
+                                1
+                            </td>
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                대구 알고리즘 팟 구함(급구!!!)
+                            </th>
+                            <td class="px-6 py-4">
+                                2/5
+                            </td>
+                            <td class="px-6 py-4">
+                                정글러
+                            </td>
+                            <td class="px-6 py-4">
+                                2023.08.08
+                            </td>
+                        </tr>
+                        {% if parties %}
+                        <p>  있음 </p>
+                        {% else %}
+                        <p>없음</p>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endblock %}
