@@ -82,5 +82,15 @@ def login():
 def party_list():
     return render_template('partyList.html')
 
+
+@app.route('/myparty', methods=['GET'])
+def my_list():
+    return render_template('myParty.html')
+
 if __name__ == '__main__':
     app.run()
+
+   
+    # result = list(db.partyList.find({}, {'_id': 0}))
+    # db.party.insert_one({""})
+    # return jsonify({'result': 'success', 'parties': result})
