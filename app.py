@@ -22,10 +22,9 @@ client = MongoClient('localhost', 27017)
 userdb = client.userdb
 
 @app.route('/')
-def hello_world():  # put application's code here
-    title = "hello world"
-    data = range(10)
-    return render_template('login.html', title1=title, data=data)
+def home():  # put application's code here
+    
+    return render_template('index.html')
 
 # 회원가입
 @app.route('/register', methods=['GET','POST'])
