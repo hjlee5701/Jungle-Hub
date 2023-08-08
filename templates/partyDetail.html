@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>partyDetail</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.js"></script>
 
     <script src="https://cdn.tailwindcss.com/3.3.0"></script>
@@ -29,76 +29,67 @@
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
 
-        <h1>알고리즘 스터디</h1>
-        <div class="wrap">
-            <div class="card">
-                <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-96x96t">
-                            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                        </figure>
-                    </div>
-                    <div class="media-content" style="margin: 10px;">
-                        <p class="title is-4">{{name}}</p>
-                        <p class="subtitle is-6">{{dateViews}}</p>
-                    </div>
+    <h1>알고리즘 스터디</h1>
+    <div class="wrap">
+        <div class="card">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96t">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                    </figure>
                 </div>
-
-                <div class="content">
-                    <form class="box">
-                        <div class="field">
-                            <label class="label">인원</label>
-                            <div class="control">
-                                <p class="content_text">{{duration}}</p>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label">마감기한</label>
-                            <div class="control">
-                                <p class="content_text">{{exfireDate}}</p>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label">활동기간</label>
-                            <div class="control">
-                                <p class="content_text">{{duration}}</p>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label">오픈톡방</label>
-                            <div class="control">
-                                <p class="content_text">{{duration}}</p>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label" style="margin-top: 50px;">스터디 방향</label>
-                            <div class="control">
-                                <textarea class="textarea" readonly>{{duration}}</textarea>
-                            </div>
-                        </div>
-                        <div style="margin: 0,auto; width: 500px;">
-                            <button class="button is-primary">참가하기</button>
-                            <button class="button is-primary">참가취소</button>
-                        </div>
-                        
-                    </form>
-
-
-
-
-
+                <div class="media-content" style="margin: 10px;">
+                    <p class="title is-4">{{ title }}</p>
+                    <p class="subtitle is-6">{{ startDate }} ~ {{ endDate }}</p>
                 </div>
+            </div>
+
+            <div class="content">
+                <form class="box">
+                    <div class="field">
+                        <label class="label">인원</label>
+                        <div class="control">
+                            <p class="content_text">{{ people }}</p>
+                        </div>
+                    </div>
+
+
+                    <div class="field">
+                        <label class="label">마감 기한</label>
+                        <div class="control">
+                            <p class="content_text">{{ closeDate }}</p>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">오픈톡방</label>
+                        <div class="control">
+                            <p class="content_text">{{ chatUrl }}</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" style="margin-top: 50px;">스터디 방향</label>
+                        <div class="control">
+                            <textarea class="textarea" readonly>{{ content }}</textarea>
+                        </div>
+                    </div>
+                    <div style="margin: 0,auto; width: 500px;">
+                        <button class="button is-primary">참가하기</button>
+                        <button class="button is-primary">참가취소</button>
+                    </div>
+
+                </form>
+
 
             </div>
 
         </div>
 
     </div>
+
+</div>
 
 </body>
 
