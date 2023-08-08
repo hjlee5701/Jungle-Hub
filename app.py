@@ -87,6 +87,36 @@ def party_list():
 def my_list():
     return render_template('myParty.html')
 
+
+#파티 페이지
+@app.route('/resistparty', methods=['GET'])
+def getResistForm():
+    return render_template('makeForm.html')
+
+#파티 생성 함수
+@app.route('/resistparty', methods=['POST'])
+def makeParty():
+    title = request.form['title']
+    people = request.form['people']
+    time = request.form['time']
+    startDate = request.form['startDate']
+    endDate = request.form['endDate']
+    closeDate = request.form['closeDate']
+    chatUrl = request.form['chatUrl']
+    content = request.form['content']
+    # print(title)
+    # print(people)
+    # print(time)
+    # print(startDate)
+    # print(endDate)
+    # print(closeDate)
+    # print(chatUrl)
+    # print(content)
+    doc = {'title': title, 'people':people, 'time': time, 'startDate':startDate, 'endDate':endDate,
+           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content}
+    userdb.party.insert_one(doc)
+    return jsonify({'result': 'success', 'msg': '이 요청은 POST!'})
+
 if __name__ == '__main__':
     app.run()
 
