@@ -1,88 +1,88 @@
 {% extends "base.html" %}
-    {% block content %}
-        <div style="position: relative;">
-            <img src="../static/images/main.jpg" style="margin-top: -10px; height: 350px;">
-            <div class="text-white text-right font-bold text-gray-900 dark:text-white md:text-2xl lg:text-6xl" 
-              style="position: absolute; top: 50%; right: 30px; transform: translateY(-50%);">
-              <h1 class="text-white mb-0 text-2xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">Gather your colleagues <br> in Jungle</h1>
-              <p class="text-white mb-6 text-lg font-normal text-gray-300 lg:text-xl">This is the Jungle. Let's make party</p>
-              <a href="#" class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                    Make Party
-                  <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-              </svg>
-              </a>
-            </div>
+{% block content %}
+    <div style="position: relative; width: 100%;">
+        <img src="../static/images/main.png" style="margin-top: -10px; width: 100%; height: 350px;">
+        <div class="text-white text-right font-bold text-gray-900 dark:text-white md:text-2xl lg:text-6xl" 
+            style="position: absolute; top: 50%; right: 30px; transform: translateY(-50%);">
+            <h1 class="text-white mb-0 text-2xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">Gather your colleagues <br> in Jungle</h1>
+            <p class="text-white mb-6 text-lg font-normal text-gray-300 lg:text-xl">This is the Jungle. Let's make party</p>
+            <a href="/party/register" class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                Make Party
+                <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+            </a>
         </div>
-        <div class="wrap container mx-auto">      
-            <div class="relative overflow-x-auto">
-                <!-- <h1 class="my-3 font-bold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-                    Last One!
-                </h1> -->
-                <hr class="mb-3">
-                <div class="flex mt-6 space-x-5 sm:justify-end md:mt-0">
-                    <a href="/party">더보기>></a>
-                </div>
-                <br>
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                NO
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                제목
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                인원
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                파티장
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                모집기한
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4">
-                                1
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                대구 알고리즘 팟 구함(급구!!!)
-                            </th>
-                            <td class="px-6 py-4">
-                                2/5
-                            </td>
-                            <td class="px-6 py-4">
-                                정글러
-                            </td>
-                            <td class="px-6 py-4">
-                                2023.08.08
-                            </td>
-                        </tr>
-                        {% for party in parties %}
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-4">
-                                    {{party.no}}
-                                </td>
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{party.title}}
-                                </th>
-                                <td class="px-6 py-4">
-                                    {{party.people}}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{party.userId}}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{party.closeDate}}
-                                </td>
-                            </tr>
-                        {%endfor%}
-                    </tbody>
-                </table>
-            </div>
+    </div>
+    
+    <div class="relative overflow-x-auto">
+        <!-- <h1 class="my-3 font-bold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+            Last One!
+        </h1> -->
+        <hr class="mb-3">
+        <div class="flex mt-6 space-x-5 sm:justify-end md:mt-0">
+            <a href="/party">더보기>></a>
         </div>
-    {% endblock %}
+        <br>
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        NO
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        제목
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        인원
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        파티장
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        모집기한
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">
+                        1
+                    </td>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        대구 알고리즘 팟 구함(급구!!!)
+                    </th>
+                    <td class="px-6 py-4">
+                        2/5
+                    </td>
+                    <td class="px-6 py-4">
+                        정글러
+                    </td>
+                    <td class="px-6 py-4">
+                        2023.08.08
+                    </td>
+                </tr>
+                {% for party in parties %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            {{party.no}}
+                        </td>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{party.title}}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{party.people}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{party.userId}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{party.closeDate}}
+                        </td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
