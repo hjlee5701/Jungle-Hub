@@ -83,10 +83,11 @@ def login():
     print(refresh_token)
     return resp
 
-
+#전체 파티 리스트
 @app.route('/party', methods=['GET'])
 def party_list():
-    partyList = list(userdb.partyList.find({}))
+    partyList = list(userdb.party.find({}))
+    print(partyList)
     return render_template('partyList.html', partyList=partyList)
 
 
