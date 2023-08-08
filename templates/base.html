@@ -17,11 +17,11 @@
 </head>
 
 <body>
-    <div class="wrap container mx-auto">
+    <div class="container max-w-screen-lg mx-auto px-5">
         <header class="header">
-            <nav class="bg-white border-gray-200 px-4 lg:px-0 py-2.5">
+            <nav class="bg-white border-gray-200 py-2.5">
                 <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                    <a href="#" class="flex items-center">
+                    <a href="/" class="flex items-center">
                         <img src="../static/images/logo.png" class="mr-3 h-6 sm:h-9" />
                     </a>
                     <div class=" flex items-center lg:order-2 border-b border-gray-200 dark:border-gray-700">
@@ -48,12 +48,12 @@
                 </div>
             </nav>
         </header>
-    
-        {% block content %}
-            <!-- Template insert -->
-        {% endblock %}
-
-        <footer class="bg-white dark:bg-gray-900">
+        <section>
+            {% block content %}
+                <!-- Template insert -->
+            {% endblock %}
+        </section>
+        <footer class="mt-20 bg-white dark:bg-gray-900">
             <div class="mx-auto w-full max-w-screen-xl">
                 <div class="px-4 py-6 bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between">
                     <span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">© 2023 <a href="https://flowbite.com/">Flowbite™</a>. All Rights Reserved.
