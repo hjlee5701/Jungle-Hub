@@ -27,11 +27,11 @@ def home():  # put application's code here
     return render_template('index.html')
 
 # 회원가입
-@app.route('/register', methods=['GET','POST'])
+@app.route('/signin', methods=['GET','POST'])
 def register():
     if request.method == 'GET':
         print('hi')
-        return render_template("register.html")
+        return render_template("sigin.html")
     else:
         #회원정보 생성
         userid = request.form.get('id_input')
@@ -48,8 +48,11 @@ def register():
         return redirect('/register')
 
 # 로그인
-@app.route('/login', methods = ['POST'])
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        # print('hi')
+        return render_template("login.html")
     user_id = request.form['id_input']
     user_pw = request.form['pw_input']
     # print(user_id)
@@ -79,12 +82,14 @@ def login():
 
 @app.route('/party', methods=['GET'])
 def party_list():
-    return render_template('partyList.html')
+    partyList = list(userdb.partyList.find({}))
+    return render_template('partyList.html', partyList=partyList)
 
 
 @app.route('/myparty', methods=['GET'])
 def my_list():
-    return render_template('myParty.html')
+    myPartyList = list(userdb.partyList.find({'userId': 'ididid'},{'_id':False}))
+    return render_template('myParty.html', myPartyList=myPartyList)
 
 
 #파티 페이지
