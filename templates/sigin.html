@@ -69,6 +69,11 @@
             let id_input = $('#register_id_input').val();
             let email_input = $('#register_email_input').val();
             let pw_input = $('#register_pw_input').val();
+            if (id_input == '' || email_input == '' || pw_input == '') {
+                alert('빈칸을 채워주세요')
+            } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}/.test(pw_input)){
+                alert('비밀번호는 최소8자에서 12자, 최소 하나의 문자 및 하나의 숫자로 구성되어야 합니다.')
+            } else {
             $.ajax({
                 type: "POST",
                 contentType: 'application/json',
@@ -84,9 +89,9 @@
                     } else {
                         alert('회원가입 실패!')
                     }
-                }
 
-            })
+                })
+            }
         }
     </script>
 </head>

@@ -68,30 +68,25 @@
         function login() {
             let id_input = $('#login_id_input').val();
             let pw_input = $('#login_pw_input').val();
-            console.log(id_input)
-            console.log(pw_input)
-
-            $.ajax({
+            if (id_input == '' || pw_input == '') {
+                alert('빈칸을 채워주세요')
+            } else {
+                $.ajax({
                     type: "POST",
-                    url: "users/login", // 로그인 처리를 담당하는 서버 스크립트 주소
-                    headers: { 'Content-Type': 'application/json' },
-                    data: JSON.stringify({
-                        email: id_input,
-                        password: pw_input
-                    }),
+                    url: "/users/login",
+                    headers: {'Content-Type': 'application/json'},
+                    data: JSON.stringify({ 'email': id_input, 'password': pw_input }),
                     success: function (response) {
-
-                        console.log(response["access_tokken"])
-                        createCookie(response["access_tokken"]);
-                        alert("로그인성공")
-                        location.href = "/";
-
-
-
-                    },error: function(){
+                        if (response['result']) {
+                          console.log(response["access_tokken"])
+                          createCookie(response["access_tokken"]);
+                          alert("로그인성공")
+                          location.href = "/";
+                        } ,error: function(){
                         alert("로그인실패")
                     }
-                });
+                })
+            }
         }
     </script>
 </head>
