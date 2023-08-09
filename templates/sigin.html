@@ -78,6 +78,9 @@
                     if (response['result'] == 'success') {
                         window.location.href = 'http://localhost:5000/'
                         createCookie(response['access_token'])
+                        alert("회원가입 성공")
+                        location.href = "/";
+
                     } else {
                         alert('회원가입 실패!')
                     }
@@ -94,7 +97,7 @@
             <div class="container">
                 <div class="columns is-centered">
                     <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-                        <form action="" class="box">
+                        <div action="" class="box">
                             <div class="field">
                                 &nbsp;
                                 &nbsp;
@@ -139,13 +142,13 @@
                             </div>
                             &nbsp;
                             <div class="login-button-area">
-                                <button style="color:white;background-color:#5F7E5D;" class="login-button"
+                                <button type="button" style="color:white;background-color:#5F7E5D;" class="login-button"
                                     onclick="register()">
                                     회원가입
                                 </button>
                             </div>
                             &nbsp;
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
