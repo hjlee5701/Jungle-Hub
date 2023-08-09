@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="kr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Party Register</title>
+{% extends "base.html" %}
+{% block title %}
+    Party register
+{% endblock %}
+{% block head %}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
@@ -59,10 +57,8 @@
         }
 
     </script>
-
-</head>
-
-<body>
+{% endblock %}
+{% block content %}
 
     <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -178,8 +174,4 @@
 
         </form>
     </div>
-
-
-</body>
-
-</html>
+{% endblock %}
