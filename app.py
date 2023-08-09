@@ -112,11 +112,15 @@ def test():
 #전체 파티 리스트
 @app.route('/party', methods=['GET'])
 def party_list():
-    option = 'default'
     partyList = list(userdb.party.find({}))
     # print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
-    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList option=option)
+    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
+
+@app.route('/option',methods=['POST'])
+def option():
+    val = request.form.get()
+    print(val)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
@@ -146,9 +150,8 @@ def makeParty():
     content = request.form['content']
     user = validateToken(request.cookies)
     userId = user['id']
-
     doc = {'title': title, 'people': people, 'startDate': startDate, 'endDate': endDate,
-           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0, 'userId': userId}
+           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0, 'userId': userId, 'page_num':len(list(userdb.party.find({})))//10}
     userdb.party.insert_one(doc)
     return jsonify({'result': 'success'})
 
