@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, Response, current_app, jsonify,session,url_for
+from flask import Flask, request, redirect, render_template, Response, current_app, jsonify, url_for
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 import jwt as JWT
@@ -80,10 +80,10 @@ def show_login_page():
 def show_user_register_page():
     return render_template('sigin.html')
 
-# @app.route("/login", methods=['POST'])
-# def login():
-#     #채워야함
-#     return render_template('login.html')
+@app.route("/login", methods=['get'])
+def login():
+    #채워야함
+    return render_template('login2.html')
 
 # @app.route("/signin", methods=['POST'])
 # def register():
@@ -105,17 +105,11 @@ def test():
     return render_template('testPage.html', jwtstate=isvalid)
 
 
-@app.route("/users/protected")
-@jwt_required()
-def protected():
-    current_user_id = get_jwt_identity()
-    return jsonify(logged_in_as=current_user_id), 200
-
-
-
-
-
-
+# @app.route("/users/protected")
+# @jwt_required()
+# def protected():
+#     current_user_id = get_jwt_identity()
+#     return jsonify(logged_in_as=current_user_id), 200
 
 
 
@@ -140,9 +134,17 @@ def my_list():
     return render_template('myParty.html', myPartyList=myPartyList)
 
 
-# 파티 페이지
+# 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
 def getResistForm():
+    result = validateToken(request.cookies)
+    if(result["state"]):
+        print(result['id'])
+
+    else:
+        print("실패")
+        return redirect("http://127.0.0.1:5000/")
+        
     return render_template('partyRegister.html')
 
 
@@ -234,6 +236,7 @@ def cancelParty():
         return jsonify({'result': 'notJoin'})
 
 
+#토큰 검증 함수
 def validateToken(cookies):
     print("토큰검증")
     access_token = cookies.get("access_token")

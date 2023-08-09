@@ -57,24 +57,39 @@
     <!-- style -->
 
     <script>
+        function createCookie(value) {
+            console.log("쿠키생성")
+            var now = new Date();
+            var expirationDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 0, 0, 0);
+            document.cookie = 'access_token=' + value + '; expires=' + expirationDate + '; path=/';
+        };
+
+
         function login() {
             let id_input = $('#login_id_input').val();
             let pw_input = $('#login_pw_input').val();
             console.log(id_input)
             console.log(pw_input)
+
             $.ajax({
-                type: "POST",
-                url: "/users/login",
-                data: JSON.stringify({ 'email': id_input, 'password': pw_input }),
-                success: function (response) {
-                    if (response['result']) {
-                        window.location.href = 'http://localhost:5000/'
-                        createCookie(response['access_token'])
-                    } else {
-                        alert('로그인 실패!')
+                    type: "POST",
+                    url: "users/login", // 로그인 처리를 담당하는 서버 스크립트 주소
+                    headers: { 'Content-Type': 'application/json' },
+                    data: JSON.stringify({
+                        email: id_input,
+                        password: pw_input
+                    }),
+                    success: function (response) {
+
+                        console.log(response["access_tokken"])
+                        createCookie(response["access_tokken"]);
+                        alert("로그인성공")
+                        location.href = "/";
+
+
+
                     }
-                }
-            })
+                });
         }
     </script>
 </head>
@@ -121,7 +136,7 @@
                             </div>
                             &nbsp;
                             <div class="login-button-area">
-                                <button style="color:white;background-color:#5F7E5D;" class="login-button"
+                                <button type="button" style="color:white;background-color:#5F7E5D;" class="login-button"
                                     onclick="login()">
                                     로그인
                                 </button>
