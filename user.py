@@ -9,7 +9,7 @@ from pymongo import MongoClient
 import jwt
 
 client = MongoClient('localhost', 27017)
-db = client.dbsparta
+db = client.userdb
 
 class UserRegisterResource(Resource):
     def post(self):
