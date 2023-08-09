@@ -74,16 +74,19 @@
                 $.ajax({
                     type: "POST",
                     url: "/users/login",
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     data: JSON.stringify({ 'email': id_input, 'password': pw_input }),
                     success: function (response) {
-                        if (response['result']) {
-                          console.log(response["access_tokken"])
-                          createCookie(response["access_tokken"]);
-                          alert("로그인성공")
-                          location.href = "/";
-                        }}
-                         ,error: function(){
+                        if (response['result'] == "success") {
+                            console.log(response["access_tokken"])
+                            createCookie(response["access_tokken"]);
+                            alert("로그인성공")
+                            location.href = "/";
+                        }else{
+                            alert(response["error"])
+
+                        }
+                    }, error: function () {
                         alert("로그인실패")
                     }
                 })

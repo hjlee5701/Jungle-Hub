@@ -1,58 +1,73 @@
 {% extends "base.html" %}
-    {% block content %}   
-        <div class="relative overflow-x-auto">
-            <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-                Jungle Party
-            </h1>
-            <hr>
-            <br>
-            <div class="flex mt-3 space-x-5 sm:justify-end md:mt-0">
-                <a href="/party/register" class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                    글 등록하기
-                </a>
-                <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option default>분류</option>
-                    <option>마감 임박</option>
-                    <option>마지막 1명</option>
-                </select> 
-            </div>
-            <br>
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-s text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr class="py-3">
-                        <th scope="col-6" class="py-3 bg-gray-100">
-                            제목
-                        </th>
-                        <th scope="col-1" class="py-3">
-                            인원
-                        </th>
-                        <th scope="col-2" class="py-3 bg-gray-100">
-                            파티장
-                        </th>
-                        <th scope="col-1" class="py-3">
-                            모집기한
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- _id, title, people, time, startDate, endDate, closeDate, chatUrl, content -->
-                    {% for party in partyList %}
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="w-2/6 py-4 font-medium text-gray-900"  style="text-indent: 20px;">
-                                <a href="{{ url_for('getPartyDetail', partyId=party._id) }}">{{party.title}}</a>
-                            </td>
-                            <td class="w-1/6 text-center">
-                                {{party.member}}/{{party.people}}
-                            </td>
-                            <td class="w-2/6 text-center">
-                                {{party.userId}}
-                            </td>
-                            <td class="w-1/6 text-center">
-                                {{party.closeDate}}
-                            </td>
-                        </tr>
-                    {%endfor%}
-                </tbody>
-            </table>
-        </div>
-    {% endblock %}
+{% block content %}
+<div class="relative overflow-x-auto">
+    <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
+        Jungle Party
+    </h1>
+    <hr>
+    <br>
+    <div class="flex mt-3 space-x-5 sm:justify-end md:mt-0">
+        <a href="/party/register"
+            class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+            글 등록하기
+        </a>
+        <select id="category"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option default>분류</option>
+            <option>마감 임박</option>
+            <option>마지막 1명</option>
+        </select>
+    </div>
+    <br>
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-s text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr class="py-3">
+                <th scope="col-6" class="py-3 bg-gray-100">
+                    제목
+                </th>
+                <th scope="col-1" class="py-3">
+                    인원
+                </th>
+                <th scope="col-2" class="py-3 bg-gray-100">
+                    파티장
+                </th>
+                <th scope="col-1" class="py-3">
+                    모집기한
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- _id, title, people, time, startDate, endDate, closeDate, chatUrl, content -->
+            {% for party in partyList %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="w-2/6 py-4 font-medium text-gray-900" style="text-indent: 20px;">
+                    <a href="{{ url_for('getPartyDetail', partyId=party._id) }}">{{party.title}}</a>
+                </td>
+                <td class="w-1/6 text-center">
+                    {{party.member}}/{{party.people}}
+                </td>
+                <td class="w-2/6 text-center">
+                    {{party.userId}}
+                </td>
+                <td class="w-1/6 text-center">
+                    {{party.closeDate}}
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next page</a>
+        <ul class="pagination-list">
+            <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+            <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+            <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+            <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+            <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}
