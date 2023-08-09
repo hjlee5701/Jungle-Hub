@@ -72,12 +72,24 @@ def show_main():
 
     return render_template('main.html')
 
-@app.route("/login", methods=['GET'])
-def login():
-
+@app.route("/show_login_page", methods=['GET'])
+def show_login_page():
     return render_template('login.html')
 
+@app.route("/show_user_register_page", methods=['GET'])
+def show_user_register_page():
+    return render_template('sigin.html')
 
+# @app.route("/login", methods=['POST'])
+# def login():
+#     #채워야함
+#     return render_template('login.html')
+
+# @app.route("/signin", methods=['POST'])
+# def register():
+#     #채워야함
+    
+#     return render_template('login.html')
 
 @app.route("/test", methods=['GET'])
 def test():
