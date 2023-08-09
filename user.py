@@ -76,20 +76,20 @@ class UserLoginResource(Resource):
 
         # result_list = 1 : 유저 데이터 존재, 0 : 데이터 없음
         if len(result_list) == 0:
-            return {"error": "존재하지 않는 회원입니다."}, 400
+            return {"error": "존재하지 않는 이메일 입니다."}
 
         # 비밀번호 확인
         user_info = result_list[0]
         print(user_info['password'])
         check = check_password(data['password'], user_info['password'])
         if check == False:
-            return {"error": "비밀번호가 맞지 않습니다."}, 400
+            return {"error": "비밀번호가 맞지 않습니다."}
 
         # 'user_id' JWT 암호화
         
         print(user_info["id"])
-        additional_claims = {"aud": "some_audience", "foo": "bar"}
-        access_token = create_access_token(identity=user_info['id'],additional_claims=additional_claims)
+        
+        access_token = create_access_token(identity=user_info['id'])
         # resp = jsonify({'login': True})
         print(access_token)
 
