@@ -45,8 +45,8 @@ api.add_resource(UserLogoutResource, '/users/logout')  # 로그아웃
 
 @app.route('/')
 def home():  # put application's code here
-
-    return render_template('index.html')
+    lbtn, sbtn,obtn = setUserArea(request)
+    return render_template('index.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
 
 
 @app.route("/main", methods=['GET'])
@@ -80,16 +80,11 @@ def show_login_page():
 def show_user_register_page():
     return render_template('sigin.html')
 
-@app.route("/login", methods=['get'])
+@app.route("/logout", methods=['get'])
 def login():
     #채워야함
-    return render_template('login2.html')
+    return render_template('logout.html')
 
-# @app.route("/signin", methods=['POST'])
-# def register():
-#     #채워야함
-    
-#     return render_template('login.html')
 
 @app.route("/test", methods=['GET'])
 def test():
@@ -118,8 +113,8 @@ def test():
 def party_list():
     partyList = list(userdb.party.find({}))
     print(partyList)
-    return render_template('partyList.html', partyList=partyList)
-
+    lbtn, sbtn, obtn = setUserArea(request)
+    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
@@ -131,8 +126,9 @@ def getResistForm():
     else:
         print("실패")
         return redirect("http://127.0.0.1:5000/")
-        
-    return render_template('partyRegister.html')
+    
+    lbtn, sbtn, obtn = setUserArea(request)
+    return render_template('partyRegister.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
 
 
 
@@ -226,7 +222,10 @@ def host_list():
     user = validateToken(request.cookies)
     userId = user['id']
     hostPartyList = list(userdb.party.find({'userId': userId}))
-    return render_template('myParty.html', hostPartyList=hostPartyList)
+
+    lbtn, sbtn,obtn = setUserArea(request)
+    return render_template('myParty.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
+
 
 
 #파티장의 파티 삭제
@@ -254,6 +253,20 @@ def validateToken(cookies):
                     return {"state": False}
     else:
          return {"state": False}
+    
+def setUserArea(request):
+    result = validateToken(request.cookies)
+    if(result["state"]):
+        lbtn = 0
+        sbtn = 0
+        obtn = 1
+
+    else:
+        lbtn = 1
+        sbtn = 1
+        obtn = 0
+    return lbtn, sbtn, obtn
+
 
 
 if __name__ == '__main__':
