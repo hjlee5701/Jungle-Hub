@@ -242,13 +242,31 @@ def delete_party():
 
 
 
-#파티장의 파티 수정
-@app.route('/update/<partyId>', methods=['GET','POST'])
-def update_party(partyId):
+#파티장의 파티 수정 페이지로 데이터 전송
+@app.route('/toupdate/<partyId>', methods=['GET','POST'])
+def toUpdateParty(partyId):
     condition = {'_id': ObjectId(partyId)}  
     party = userdb.party.find_one(condition)
 
     return render_template('partyUpdate.html', party=party)
+
+#파티 수정 기능
+@app.route('/update', methods=['POST'])
+def updateParty():
+    modtitle = request.form['title']
+    modpeople = request.form['people']
+    modstartDate = request.form['startDate']
+    modendDate = request.form['endDate']
+    modcloseDate = request.form['closeDate']
+    modchatUrl = request.form['chatUrl']
+    modcontent = request.form['content']
+    partyId = ObjectId(request.form['partyId'])
+
+    userdb.party.update_one({'_id': partyId}, {'$set':{
+        'title': modtitle, 'people': modpeople, 'startDate': modstartDate, 'endDate': modendDate,
+        'closeDate': modcloseDate, 'chatUrl': modchatUrl, 'content': modcontent
+    }})
+    return jsonify({'result': 'success'})
 
 
 
