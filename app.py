@@ -239,6 +239,17 @@ def delete_party():
     return jsonify({'result': 'success'})
 
 
+
+#파티장의 파티 수정
+@app.route('/update/<partyId>', methods=['GET','POST'])
+def update_party(partyId):
+    condition = {'_id': ObjectId(partyId)}  
+    party = userdb.party.find_one(condition)
+
+    return render_template('partyUpdate.html', party=party)
+
+
+
 #토큰 검증 함수
 def validateToken(cookies):
     print("토큰검증")

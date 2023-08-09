@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% block head %}
+    <script>
+        function updateParty(partyId){
+            alert(partyId)
+            $.ajax({
+                type: 'POST',
+                url: '/update',
+                data: {'partyId': partyId},
+                success: function(res){
+                    if(res['result']=='success'){
+                        alert('수정 완료!')
+                    }else{
+                        alert('오류!')
+                    }
+                }
+            })
+        }
         function deleteParty(partyId){
             $.ajax({
                 type: 'POST',
@@ -18,8 +34,8 @@
         }
     </script>
 {% endblock %}
-{% block content %}  
-    <div class="relative overflow-x-auto">
+{% block content %}
+<div class="relative overflow-x-auto">
         <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
             My Party
         </h1>
@@ -63,9 +79,13 @@
                             {{partyHost.closeDate}}
                         </td>
                         <td class="text-center">
-                            <button type="button" onclick="updateParty(`{{partyHost._id}}`)" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            <a href="{{url_for('update_party', partyId=partyHost._id)}}" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                 수정
-                            </button>
+                            </a>
+                            <!-- <button type="button" onclick="updateParty(`{{partyHost._id}}`)" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                수정
+                            </button> -->
+                            
                             <button type="button" onclick="deleteParty(`{{partyHost._id}}`)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                 삭제
                             </button>
@@ -75,5 +95,6 @@
             </tbody>
         </table>
     </div>
+    
 
 {% endblock %}
