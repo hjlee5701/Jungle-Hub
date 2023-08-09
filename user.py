@@ -11,10 +11,9 @@ import jwt
 client = MongoClient('localhost', 27017)
 db = client.dbsparta
 
-
 class UserRegisterResource(Resource):
     def post(self):
-        print("Tlqkf")
+        print("hi")
         # 데이터 교환 형식
         # {
         #     "user_name": "홍길동",
@@ -22,7 +21,7 @@ class UserRegisterResource(Resource):
         #     "password": "1234"
         # }
         data = request.get_json()
-        print(data["email"])
+        print(data)
 
         # 이메일 주소 형식 확인, email_validator 사용
         try:
@@ -62,7 +61,7 @@ class UserRegisterResource(Resource):
 class UserLoginResource(Resource):
     def post(self):
         data = request.get_json()
-        print(data["email"])
+        print(data)
 
         try:
             result_list = list(db.users.find({'email': data['email']}))
