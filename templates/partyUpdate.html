@@ -15,25 +15,26 @@
         function updateParty(partyId) {
             var title = $('#title').val()
             var people = $('#people').val()
+            var member = $('#member').val()
             var startDate = $('#startDate').val()
             var endDate = $('#endDate').val()
             var closeDate = $('#closeDate').val()
             var chatUrl = $("#chatUrl").val()
             var content = $("#content").val()
-            doc =  {"title" : title, "people":people, "startDate":startDate,
-                    "endDate": endDate, "closeDate":closeDate, "chatUrl":chatUrl,
-                    "content":content, "partyId":partyId }
+            doc =  {"title" : title, "people":people, "member": member,
+                    "startDate":startDate, "endDate": endDate, "closeDate":closeDate,
+                    "chatUrl":chatUrl,"content":content, "partyId":partyId }
             console.log(doc)
 
             $.ajax({
                 type: "POST",
                 url: "/update",
-                data: { "title" : title, "people":people, "startDate":startDate,
-                        "endDate": endDate, "closeDate":closeDate, "chatUrl":chatUrl,
-                        "content":content, "partyId":partyId },
+                data: {"title" : title, "people":people, "member": member,
+                       "startDate":startDate, "endDate": endDate, "closeDate":closeDate,
+                       "chatUrl":chatUrl,"content":content, "partyId":partyId },
                 success: function (response) {
                     alert('수정 완료')
-                    window.location.assign('/');
+                    window.location.assign('/mypage');
                 }
             })
         }
@@ -62,15 +63,23 @@
 
 
                 <div class="sm:col-span-2" style="display: flex; justify-content: space-between;">
-                    <div class="sm:col-span-2" style="width: 47%;">
+                    <div class="sm:col-span-2" style="width: 31%;">
                         <label class="block text-sm font-semibold leading-6 text-gray-900">
-                            인원
+                            정원
                         </label>
                         <input value="{{party.people}}" type="text" name="num" id="people"
                         class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
 
                     </div>
-                    <div class="sm:col-span-2" style="width: 47%;">
+                    <div class="sm:col-span-2" style="width: 31%;">
+                        <label class="block text-sm font-semibold leading-6 text-gray-900">
+                            파티원
+                        </label>
+                        <input value="{{party.member}}" type="text" name="num" id="member"
+                        class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+
+                    </div>
+                    <div class="sm:col-span-2" style="width: 31%;">
                         <label value="{{party.chatUrl}}" for="email" class="block text-sm font-semibold leading-6 text-gray-900">
                             오픈톡방
                         </label>
@@ -151,7 +160,7 @@
                         수정하기
                     </button>
 
-                    <a href="/myparty" type="button" id="cancelBtn" onclick="cancel()"  style="width: 47%;"
+                    <a href="/mypage" type="button" id="cancelBtn" onclick="cancel()"  style="width: 47%;"
                         class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 hover:text-white">
                         취소하기
                     </a>
