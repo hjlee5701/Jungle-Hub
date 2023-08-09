@@ -34,14 +34,27 @@
                                 </a>
                             </li>
                             <li class="mr-2">
-                                <a href="/show_login_page" class="font-bold inline-flex items-center justify-center p-4 text-gray-400 border-b-2 border-transparent rounded-t-lg active dark:text-gray-700 hover:text-gray-700 hover:border-green-800 dark:hover:text-gray-800 groupp" aria-current="page">
-                                    Login
-                                </a>
+                                {% if lbtn == 1 %}
+                                    <a href="/show_login_page" class="font-bold inline-flex items-center justify-center p-4 text-gray-400 border-b-2 border-transparent rounded-t-lg active dark:text-gray-700 hover:text-gray-700 hover:border-green-800 dark:hover:text-gray-800 groupp" aria-current="page">
+                                        Login
+                                    </a>
+                                {% endif %}
+
                             </li>
                             <li class="mr-2">
-                                <a href="/show_user_register_page" class="font-bold inline-flex items-center justify-center p-4 text-gray-400 border-b-2 border-transparent rounded-t-lg active dark:text-gray-700 hover:text-gray-700 hover:border-green-800 dark:hover:text-gray-800 groupp" aria-current="page">
-                                    SignIn
-                                </a>
+                                {% if sbtn == 1 %}
+                                    <a href="/show_user_register_page" class="font-bold inline-flex items-center justify-center p-4 text-gray-400 border-b-2 border-transparent rounded-t-lg active dark:text-gray-700 hover:text-gray-700 hover:border-green-800 dark:hover:text-gray-800 groupp" aria-current="page">
+                                        SignIn
+                                    </a>
+                                {% endif %}
+                            </li>
+
+                            <li class="mr-2">
+                                {% if obtn == 1 %}
+                                    <a href="/logout" class="font-bold inline-flex items-center justify-center p-4 text-gray-400 border-b-2 border-transparent rounded-t-lg active dark:text-gray-700 hover:text-gray-700 hover:border-green-800 dark:hover:text-gray-800 groupp" aria-current="page">
+                                        Logout
+                                    </a>
+                                {% endif %}
                             </li>
                         </ul>
                     </div>

@@ -1,6 +1,41 @@
 {% extends "base.html" %}
-{% block content %}  
-    <div class="relative overflow-x-auto">
+{% block head %}
+    <script>
+        function updateParty(partyId){
+            alert(partyId)
+            $.ajax({
+                type: 'POST',
+                url: '/update',
+                data: {'partyId': partyId},
+                success: function(res){
+                    if(res['result']=='success'){
+                        alert('수정 완료!')
+                    }else{
+                        alert('오류!')
+                    }
+                }
+            })
+        }
+        function deleteParty(partyId){
+            $.ajax({
+                type: 'POST',
+                url: '/delete',
+                data: {'partyId': partyId},
+                success: function(res){
+                    if(res['result']=='success'){
+                        alert('삭제 완료!')
+                        // window.location.assign('http://127.0.0.1:5000/');
+                        location.reload()
+                    }else{
+                        alert('오류!')
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
+{% block content %}
+<div class="relative overflow-x-auto">
         <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
             My Party
         </h1>
@@ -8,52 +43,58 @@
         <br><br>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr class="text-center">
-                    <th scope="col" class="px-6 py-3">
-                        NO
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                <tr class="text-center py-3">
+                    <th scope="col-6 " class="w-2/6 py-6 bg-gray-100">
                         제목
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col-1" class="w-1/6 px-3 py-3">
                         인원
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col-2" class="w-1/6 px-4 py-3 bg-gray-100">
                         모집기한
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="w-2/6 px-4 py-3">
                         수정/삭제
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
-                    <td class="px-6 py-4">
-                        1
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        대구 알고리즘 팟 구함(급구!!!)
-                    </th>
-                    <td class="px-6 py-4">
-                        2/5
-                    </td>
-                    <td class="px-6 py-4">
-                        2023.08.08
-                    </td>
-                    <td class="px-6 py-4">
-                        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">수정</button>
-                        <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">삭제</button>
-                    </td>
-                </tr>
+                {% if not hostPartyList %}
                 <tr>
-                    {% if parties %}
-                        <td>  있음 </td>
-                    {% else %}
-                        <td>없음</td>
-                    {% endif %}
+                    <td colspan="4"class="p-6 text-center w-full">
+                        <h1 class="text-2xl "> 정글 파티에 참여해 보세요! </h1>
+                    </td>
                 </tr>
+                {% endif %}
+                {% for partyHost in hostPartyList %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="py-4 px-6 font-medium text-gray-900"  style="text-indent: 20px;">
+                            {{partyHost.title}}
+                            
+                        </td>
+                        <td class="text-center">
+                            {{partyHost.member}}/{{partyHost.people}}
+                        </td>
+                        <td class="text-center">
+                            {{partyHost.closeDate}}
+                        </td>
+                        <td class="text-center">
+                            <a href="{{url_for('update_party', partyId=partyHost._id)}}" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                수정
+                            </a>
+                            <!-- <button type="button" onclick="updateParty(`{{partyHost._id}}`)" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                수정
+                            </button> -->
+                            
+                            <button type="button" onclick="deleteParty(`{{partyHost._id}}`)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                삭제
+                            </button>
+                        </td>
+                    </tr>
+                {%endfor%}
             </tbody>
         </table>
     </div>
+    
 
 {% endblock %}

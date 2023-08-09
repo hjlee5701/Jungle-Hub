@@ -9,7 +9,7 @@ from pymongo import MongoClient
 import jwt
 
 client = MongoClient('localhost', 27017)
-db = client.dbsparta
+db = client.userdb
 
 class UserRegisterResource(Resource):
     def post(self):
@@ -60,6 +60,7 @@ class UserRegisterResource(Resource):
 
 class UserLoginResource(Resource):
     def post(self):
+        print("hello")
         data = request.get_json()
         print(data)
 
@@ -80,7 +81,7 @@ class UserLoginResource(Resource):
             return {"error": "비밀번호가 맞지 않습니다."}, 400
 
         # 'user_id' JWT 암호화
-        payload = {"aud": "some_audience", "foo": "bar"}
+        
         print(user_info["id"])
         additional_claims = {"aud": "some_audience", "foo": "bar"}
         access_token = create_access_token(identity=user_info['id'],additional_claims=additional_claims)

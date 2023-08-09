@@ -57,30 +57,33 @@
     <!-- style -->
 
     <script>
+        function createCookie(value) {
+            console.log("쿠키생성")
+            var now = new Date();
+            var expirationDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 0, 0, 0);
+            document.cookie = 'access_token=' + value + '; expires=' + expirationDate + '; path=/';
+        };
+
+
         function login() {
             let id_input = $('#login_id_input').val();
-            // let id_input = 'abc';
             let pw_input = $('#login_pw_input').val();
-            // let pw_input = 'Aa!12345';
-            // console.log(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}/.test(pw_input))
-            // console.log(id_input)
-            // console.log(pw_input)
             if (id_input == '' || pw_input == '') {
                 alert('빈칸을 채워주세요')
-            // } else if(pw_input.match()) {
-            //     console.log('hi')
             } else {
                 $.ajax({
                     type: "POST",
                     url: "/users/login",
+                    headers: {'Content-Type': 'application/json'},
                     data: JSON.stringify({ 'email': id_input, 'password': pw_input }),
                     success: function (response) {
                         if (response['result']) {
-                            window.location.href = 'http://localhost:5000/'
-                            createCookie(response['access_token'])
-                        } else {
-                            alert('로그인 실패!')
-                        }
+                          console.log(response["access_tokken"])
+                          createCookie(response["access_tokken"]);
+                          alert("로그인성공")
+                          location.href = "/";
+                        } ,error: function(){
+                        alert("로그인실패")
                     }
                 })
             }
@@ -130,7 +133,7 @@
                             </div>
                             &nbsp;
                             <div class="login-button-area">
-                                <button style="color:white;background-color:#5F7E5D;" class="login-button"
+                                <button type="button" style="color:white;background-color:#5F7E5D;" class="login-button"
                                     onclick="login()">
                                     로그인
                                 </button>

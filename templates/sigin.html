@@ -74,18 +74,20 @@
             } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}/.test(pw_input)){
                 alert('비밀번호는 최소8자에서 12자, 최소 하나의 문자 및 하나의 숫자로 구성되어야 합니다.')
             } else {
-                $.ajax({
-                    type: "POST",
-                    contentType: 'application/json',
-                    url: "/users/register",
-                    data: JSON.stringify({ 'username': id_input, 'email': email_input, 'password': pw_input }),
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            window.location.href = 'http://localhost:5000/'
-                            createCookie(response['access_token'])
-                        } else {
-                            alert('회원가입 실패!')
-                        }
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json',
+                url: "/users/register",
+                data: JSON.stringify({ 'username': id_input, 'email': email_input, 'password': pw_input }),
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        window.location.href = 'http://localhost:5000/'
+                        createCookie(response['access_token'])
+                        alert("회원가입 성공")
+                        location.href = "/";
+
+                    } else {
+                        alert('회원가입 실패!')
                     }
 
                 })
@@ -100,7 +102,7 @@
             <div class="container">
                 <div class="columns is-centered">
                     <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-                        <form action="" class="box">
+                        <div action="" class="box">
                             <div class="field">
                                 &nbsp;
                                 &nbsp;
@@ -145,13 +147,13 @@
                             </div>
                             &nbsp;
                             <div class="login-button-area">
-                                <button style="color:white;background-color:#5F7E5D;" class="login-button"
+                                <button type="button" style="color:white;background-color:#5F7E5D;" class="login-button"
                                     onclick="register()">
                                     회원가입
                                 </button>
                             </div>
                             &nbsp;
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
