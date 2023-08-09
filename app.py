@@ -220,6 +220,15 @@ def cancelParty():
         return jsonify({'result': 'notJoin'})
 
 
+#파티장의 파티 리스트
+@app.route('/myparty', methods=['GET'])
+def host_list():
+    user = validateToken(request.cookies)
+    userId = user['id']
+    hostPartyList = list(userdb.party.find({'userId': userId}))
+    return render_template('myParty.html', hostPartyList=hostPartyList)
+
+
 #파티장의 파티 삭제
 @app.route('/delete', methods=['POST'])
 def delete_party():

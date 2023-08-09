@@ -43,35 +43,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center">
-                    <td class="px-6 py-4">
-                        1
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        대구 알고리즘 팟 구함(급구!!!)
-                    </th>
-                    <td class="px-6 py-4">
-                        2/5
-                    </td>
-                    <td class="px-6 py-4">
-                        2023.08.08
-                    </td>
-                    <td class="px-6 py-4">
-                        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">수정</button>
-                        <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">삭제</button>
-                    </td>
-                </tr>
+                {% if not hostPartyList %}
                 <tr>
-                    {% if parties %}
-                        <td>  있음 </td>
-                    {% else %}
-                        <td>없음</td>
-                    {% endif %}
+                    <td colspan="4"class="p-6 text-center w-full">
+                        <h1 class="text-2xl "> 정글 파티에 참여해 보세요! </h1>
+                    </td>
                 </tr>
+                {% endif %}
                 {% for partyHost in hostPartyList %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td scope="row" class="py-4 px-6 font-medium text-gray-900"  style="text-indent: 20px;">
+                            {{partyHost.title}}
+                            
+                        </td>
+                        <td class="text-center">
+                            {{partyHost.member}}/{{partyHost.people}}
+                        </td>
+                        <td class="text-center">
+                            {{partyHost.closeDate}}
+                        </td>
+                        <td class="text-center">
+                            <button type="button" onclick="updateParty(`{{partyHost._id}}`)" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                수정
+                            </button>
                             <button type="button" onclick="deleteParty(`{{partyHost._id}}`)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                                 삭제
                             </button>
+                        </td>
+                    </tr>
                 {%endfor%}
             </tbody>
         </table>
