@@ -114,7 +114,7 @@ def party_list():
     partyList = list(userdb.party.find({}))
     print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
-    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
+    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
@@ -125,7 +125,7 @@ def getResistForm():
 
     else:
         print("실패")
-        return redirect("http://127.0.0.1:5000/")
+        return redirect("/")
     
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyRegister.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
@@ -219,12 +219,15 @@ def cancelParty():
 #파티장의 파티 리스트
 @app.route('/myparty', methods=['GET'])
 def host_list():
-    user = validateToken(request.cookies)
-    userId = user['id']
+    result = validateToken(request.cookies)
+    if(result['state'] == False):
+        return redirect("/")
+
+    userId = result['id']
     hostPartyList = list(userdb.party.find({'userId': userId}))
 
     lbtn, sbtn,obtn = setUserArea(request)
-    return render_template('myParty.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
+    return render_template('myParty.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList)
 
 
 
