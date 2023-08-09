@@ -1,4 +1,23 @@
 {% extends "base.html" %}
+{% block head %}
+        function deleteParty(partyId){
+            $.ajax({
+                type: 'POST',
+                url: '/delete',
+                data: {'partyId': partyId},
+                success: function(res){
+                    if(res['result']=='success'){
+                        alert('삭제 완료!')
+                        // window.location.assign('http://127.0.0.1:5000/');
+                        location.reload()
+                    }else{
+                        alert('오류!')
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
 {% block content %}  
     <div class="relative overflow-x-auto">
         <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -8,20 +27,17 @@
         <br><br>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr class="text-center">
-                    <th scope="col" class="px-6 py-3">
-                        NO
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                <tr class="text-center py-3">
+                    <th scope="col-6 " class="w-2/6 py-6 bg-gray-100">
                         제목
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col-1" class="w-1/6 px-3 py-3">
                         인원
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col-2" class="w-1/6 px-4 py-3 bg-gray-100">
                         모집기한
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="w-2/6 px-4 py-3">
                         수정/삭제
                     </th>
                 </tr>
@@ -52,6 +68,11 @@
                         <td>없음</td>
                     {% endif %}
                 </tr>
+                {% for partyHost in hostPartyList %}
+                            <button type="button" onclick="deleteParty(`{{partyHost._id}}`)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                삭제
+                            </button>
+                {%endfor%}
             </tbody>
         </table>
     </div>

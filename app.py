@@ -220,6 +220,16 @@ def cancelParty():
         return jsonify({'result': 'notJoin'})
 
 
+#파티장의 파티 삭제
+@app.route('/delete', methods=['POST'])
+def delete_party():
+    partyId = request.values['partyId']
+    condition = {'_id': ObjectId(partyId)}
+
+    userdb.party.delete_one(condition)
+    return jsonify({'result': 'success'})
+
+
 #토큰 검증 함수
 def validateToken(cookies):
     print("토큰검증")
