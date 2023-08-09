@@ -270,6 +270,22 @@ def updateParty():
     return jsonify({'result': 'success'})
 
 
+#참가 등록한 파티 리스트
+@app.route('/myparty', methods=['GET'])
+def myParty():
+    # attend
+    user = validateToken(request.cookies)
+    userId = user['id']
+    parties = list(userdb.attendees.find({'userId': userId}, {'_id': False}))
+    
+    party_ids = [ObjectId(party['partyId']) for party in parties]
+    
+    # party 컬렉션에서 partyId 리스트와 일치하는 파티 데이터 검색
+    partyList = list(userdb.party.find({'_id': {'$in': party_ids}}))
+    print(len(partyList))
+    lbtn, sbtn,obtn = setUserArea(request)
+    return render_template('myParty.html',lbtn=lbtn, sbtn=sbtn,obtn=obtn, partyList=partyList, userId=userId)
+
 
 #토큰 검증 함수
 def validateToken(cookies):
