@@ -31,16 +31,22 @@ class UserRegisterResource(Resource):
             print(str(e))
             return {'error': str(e)}, 400
         
+        #중복 거부
+        dupCheck = db.users.find_one({"email":data['email']})
+        print(dupCheck)
+        if(dupCheck!=None):
+            return {"error": "중복 계정입니다."}
+            
 
+        
         # 비밀번호의 길이 유효 체크, 4~12자리
         if len(data['password']) < 4 or len(data['password']) > 12:
-            return {"error": "비밀번호의 길이를 확인해주세요 (4-12자리)"}, 400
+            return {"error": "비밀번호의 길이를 확인해주세요 (4-12자리)"}
 
         # 비밀번호 암호화, passlib 사용
         # data['password']
         hashed_password = hash_password(data['password'])
 
-        record = (data['username'], data['email'], hashed_password)
 
         doc = {'id': data['username'], 'email': data["email"], 'password': hashed_password}
         db.users.insert_one(doc)
@@ -48,8 +54,7 @@ class UserRegisterResource(Resource):
         # 'user_id' JWT 암호화
         # 수정 필요
         print()
-        additional_claims = {"aud": "some_audience", "foo": "bar"}
-        access_token = create_access_token(identity=data['username'], additional_claims=additional_claims)
+        access_token = create_access_token(identity=data['username'])
 
         return {
             "result": "success",
