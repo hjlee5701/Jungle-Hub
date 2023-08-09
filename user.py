@@ -8,7 +8,7 @@ from utils import check_password, hash_password
 from pymongo import MongoClient
 import jwt
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.225.182',27017)
 db = client.userdb
 
 class UserRegisterResource(Resource):

@@ -14,7 +14,7 @@ from flask_jwt_extended import decode_token, get_jwt_identity, jwt_required
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.225.182',27017)
 userdb = client.userdb
 
 # API 서버를 구축하기 위한 기본 구조
@@ -125,7 +125,7 @@ def getResistForm():
 
     else:
         print("실패")
-        return redirect("http://127.0.0.1:5000/")
+        return redirect("/")
     
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyRegister.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
@@ -281,4 +281,4 @@ def setUserArea(request):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0',port=5000,debug=True)
