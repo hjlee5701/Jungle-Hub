@@ -217,7 +217,7 @@ def cancelParty():
 
 
 #파티장의 파티 리스트
-@app.route('/myparty', methods=['GET'])
+@app.route('/mypage', methods=['GET'])
 def host_list():
     result = validateToken(request.cookies)
     if(result['state'] == False):
@@ -227,7 +227,7 @@ def host_list():
     hostPartyList = list(userdb.party.find({'userId': userId}))
 
     lbtn, sbtn,obtn = setUserArea(request)
-    return render_template('myParty.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList)
+    return render_template('myPage.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList, userId=userId)
 
 
 
@@ -255,6 +255,7 @@ def toUpdateParty(partyId):
 def updateParty():
     modtitle = request.form['title']
     modpeople = request.form['people']
+    modmember = request.form['member']
     modstartDate = request.form['startDate']
     modendDate = request.form['endDate']
     modcloseDate = request.form['closeDate']
@@ -263,7 +264,7 @@ def updateParty():
     partyId = ObjectId(request.form['partyId'])
 
     userdb.party.update_one({'_id': partyId}, {'$set':{
-        'title': modtitle, 'people': modpeople, 'startDate': modstartDate, 'endDate': modendDate,
+        'title': modtitle, 'people': modpeople, 'member': modmember, 'startDate': modstartDate, 'endDate': modendDate,
         'closeDate': modcloseDate, 'chatUrl': modchatUrl, 'content': modcontent
     }})
     return jsonify({'result': 'success'})
