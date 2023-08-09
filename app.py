@@ -173,11 +173,53 @@ def getPartyDetail(partyId):
 
 
 
+#파티 참가
+@app.route('/join', methods=['POST'])
+def joinParty():
+    partyId = request.values['partyId']
+
+    # 사용자가 참가 신청했던 상태인지 확인
+    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
+    if attendee:
+        # 이미 신청한 참가자
+        return jsonify({'result': 'joined'})
+    else:
+        # 새로운 참가자 insert
+        newAttendee = {'partyId': partyId, 'userId': '회원' }
+        userdb.attendees.insert_one(newAttendee)
+
+        # 참가 인원 update
+        condition = {"_id": ObjectId(partyId)}
+
+        plus_member = {"$inc": {"member": 1}}  # member 필드에 1을 더함
+        userdb.party.update_one(condition, plus_member)
+
+        return jsonify({'result': 'success'})
 
 
 
+#파티 참가취소
+@app.route('/cancel', methods=['POST'])
+def cancelParty():
+    partyId = request.values['partyId']
+    # userdb.attendees.delete_many({"userId": '회원'})
 
+    # 사용자가 참가 신청했던 상태인지 확인
+    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
+    if attendee:
+        # 참여 취소 delete
+        userdb.attendees.delete_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
 
+        # 참가 인원 update
+        condition = {"_id": ObjectId(partyId)}
+
+        minus_member = {"$inc": {"member": -1}}  # member 필드에 1을 뺌
+        userdb.party.update_one(condition, minus_member)
+
+        return jsonify({'result': 'success'})
+    else:
+        # 조건에 맞는 데이터 삭제
+        return jsonify({'result': 'notJoin'})
 
 
 def validateToken(cookies):
@@ -194,6 +236,7 @@ def validateToken(cookies):
                     return {"state": False}
     else:
          return {"state": False}
+
 
 if __name__ == '__main__':
     app.run()

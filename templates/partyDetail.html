@@ -2,7 +2,6 @@
 {% block title %}
     partyDetail
 {% endblock %}
-
 {% block head %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css"/>
@@ -23,7 +22,49 @@
             border-radius: 20px;
             padding-left: 10px;
         }
-    </style>            
+    </style>
+    
+    <script>
+        function joinParty(partyId, member, people){
+            if(member == people){
+                alert('정원입니다.')
+                return
+            }
+            console.log(member)
+            console.log(partyId)
+            console.log("!!!!!!!!!!!!!!!!!!!!!!!!")
+            $.ajax({
+            type: "POST",
+            url: "/join",
+            data: {'partyId' : partyId},
+            success: function(res) {
+                if(res['result'] == 'success'){
+                    alert('참가 완료!');
+                }else if(res['result'] == 'joined'){
+                    alert('신청한 사용자 입니다.');
+                }else{
+                    alert('오류!')
+                }
+            }
+        });
+        }
+        function cancelParty(partyId){
+            $.ajax({
+            type: "POST",
+            url: "/cancel",
+            data: {'partyId' : partyId},
+            success: function(res) {
+                if(res['result'] == 'success'){
+                    alert('참가 취소!');
+                }else if(res['result'] == 'notJoin'){
+                    alert('신청하지 않은 사용자 입니다.');
+                }else{
+                    alert('오류!')
+                }
+            }
+        });
+        }
+    </script>
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -70,11 +111,22 @@
                                 <textarea class="textarea" readonly>{{ partyDetail.content }}</textarea>
                             </div>
                         </div>
-                        <div style="margin: 0,auto; width: 500px;">
-                            <button class="button is-primary">참가하기</button>
-                            <button class="button is-primary">참가취소</button>
+                        <div style="margin: 0 auto; width: 200px">
+                            <div style="display: flex; justify-content: space-between;">
+                                <button class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800"
+                                    onclick="joinParty(`{{partyDetail._id}}`, `{{partyDetail.member}}`, `{{partyDetail.people}}`)">
+                                    참가하기
+                                </button>
+    
+                                <button class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-gray-400 rounded-lg hover:bg-gray-500 hover:text-white"
+                                    onclick="cancelParty(`{{partyDetail._id}}`)">참가취소</button>
+                            </div>
+                            <div style="display: flex; justify-content:center; width: 100%; margin-top: 10px;">
+                                <a href="/party" class="w-full inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400 hover:text-white">
+                                    뒤로가기
+                                </a>
+                            </div>
                         </div>
-
                     </form>
 
 
