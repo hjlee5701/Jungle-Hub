@@ -45,8 +45,9 @@ api.add_resource(UserLogoutResource, '/users/logout')  # 로그아웃
 
 @app.route('/')
 def home():  # put application's code here
+    parties = list(userdb.party.find({}))[:5]
     lbtn, sbtn,obtn = setUserArea(request)
-    return render_template('index.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
+    return render_template('index.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, parties=parties)
 
 
 @app.route("/main", methods=['GET'])
@@ -111,10 +112,11 @@ def test():
 #전체 파티 리스트
 @app.route('/party', methods=['GET'])
 def party_list():
+    option = 'default'
     partyList = list(userdb.party.find({}))
-    print(partyList)
+    # print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
-    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
+    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList option=option)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])

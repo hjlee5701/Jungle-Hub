@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
+<script>
+    function change_option_default(){
+        option = 'default'
+    }
+    function change_option_soon(){
+        option = 'soon'
+    }
+    function change_option_last(){
+        option = 'last'
+    }
+</script>
 <div class="relative overflow-x-auto">
     <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
         Jungle Party
@@ -13,9 +24,9 @@
         </a>
         <select id="category"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option default>분류</option>
-            <option>마감 임박</option>
-            <option>마지막 1명</option>
+            <option onclick="change_option_default()" default>분류</option>
+            <option onclick="change_option_soon()">마감 임박</option>
+            <option onclick="change_option_last()">마지막 1명</option>
         </select>
     </div>
     <br>
