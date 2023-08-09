@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, make_response
 from flask_jwt_extended import *
 from pymongo import MongoClient
-
+from bson.objectid import ObjectId
 app = Flask(__name__)
 
 # JWT 매니저 활성화
@@ -106,7 +106,6 @@ def getResistForm():
 
 
 
-
 # 파티 생성 함수
 @app.route('/party/register', methods=['POST'])
 def makeParty():
@@ -133,16 +132,16 @@ def makeParty():
     return jsonify({'result': 'success'})
 
 
-@app.route('/party/detail', methods=['GET'])
-def getPartyDetail():
-
-    return render_template('partyDetail.html', people=1)
-
 
 #파티 상세
-@app.route('/partyDetail', methods=['GET'])
-def party_detail():
-    return render_template('partyDetail.html')
+@app.route('/detail/<partyId>', methods=['GET','POST'])
+def getPartyDetail(partyId):
+    print(partyId)
+    partyDetail = userdb.party.find_one({'_id': ObjectId(partyId)},{'_id':False})
+    partyDetail['_id']= partyId
+    print(partyDetail)
+    return render_template('partyDetail.html', partyDetail=partyDetail)
+
 if __name__ == '__main__':
     app.run()
     # result = list(db.partyList.find({}, {'_id': 0}))
