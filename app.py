@@ -1,26 +1,47 @@
-from flask import Flask, render_template, request, jsonify, redirect, make_response
-from flask_jwt_extended import *
+from flask import Flask, request, redirect, render_template, Response, current_app, jsonify
+from flask_jwt_extended import JWTManager
+from flask_restful import Api
+import jwt as JWT
+
+from config import Config
+
+from jwtbreak import UserLogoutResource, jwt_blocklist
+
+from user import UserRegisterResource, UserLoginResource
+
+from flask_jwt_extended import decode_token, get_jwt_identity, jwt_required
+
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-app = Flask(__name__)
 
-# JWT 매니저 활성화
-app.config.update(DEBUG=True, JWT_SECRET_KEY="thisissecertkey")
-# 정보를 줄 수 있는 과정도 필요함 == 토큰에서 유저 정보를 받음
-jwt = JWTManager(app)
-# JWT 쿠키 저장
-app.config['JWT_COOKIE_SECURE'] = False  # https를 통해서만 cookie가 갈 수 있는지 (production 에선 True)
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_ACCESS_COOKIE_PATH'] = '/'  # access cookie를 보관할 url (Frontend 기준)
-app.config['JWT_REFRESH_COOKIE_PATH'] = '/'  # refresh cookie를 보관할 url (Frontend 기준)
-# CSRF 토큰 역시 생성해서 쿠키에 저장할지
-# (이 경우엔 프론트에서 접근해야하기 때문에 httponly가 아님)
-app.config['JWT_COOKIE_CSRF_PROTECT'] = True
-
-# Mongo DB
 client = MongoClient('localhost', 27017)
 userdb = client.userdb
 
+# API 서버를 구축하기 위한 기본 구조
+app = Flask(__name__)
+
+
+# 환경변수 셋팅
+app.config.from_object(Config)  # 만들었던 Config.py의 Config 클래스 호출
+
+# JWT 토큰 생성
+jwt = JWTManager(app)
+
+
+# 로그아웃 된 토큰이 들어있는 set을 jwt에게 알림
+@jwt.token_in_blocklist_loader
+def check_it_token_is_revoked(jwt_header, jwt_payload):
+    jti = jwt_payload['jti']
+    return jti in jwt_blocklist
+
+# restfulAPI 생성
+api = Api(app)
+
+# 경로와 리소스(api코드) 연결
+api.add_resource(UserRegisterResource, '/users/register') # 회원가입
+api.add_resource(UserLoginResource, '/users/login') # 로그인
+# 경로와 리소스(api코드) 연결
+api.add_resource(UserLogoutResource, '/users/logout')  # 로그아웃
 
 @app.route('/')
 def home():  # put application's code here
@@ -28,60 +49,68 @@ def home():  # put application's code here
     return render_template('index.html')
 
 
-# 회원가입
-@app.route('/signin', methods=['GET', 'POST'])
-def register():
-    if request.method == 'GET':
-        print('hi')
-        return render_template("sigin.html")
-    else:
-        # 회원정보 생성
-        userid = request.form.get('id_input')
-        password = request.form.get('pw_input')
-        userinfo = {'user_id': userid, 'user_pwd': password}
-
-        if not (userid and password):
-            return jsonify({'result': False})
-        # elif password != re_password:
-        #    return "비밀번호를 확인해주세요"
-        else:  # 모두 입력이 정상적으로 되었다면 밑에명령실행(DB에 입력됨)
-            userdb.users.insert_one(userinfo)
-            return jsonify({'result': True})
-        return redirect('/register')
-
-
-# 로그인
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-        # print('hi')
-        return render_template("login.html")
-    user_id = request.form['id_input']
-    user_pw = request.form['pw_input']
-    # print(user_id)
-    # print(user_pw)
-
-    ## *** find_one 시에 아무것도 없을 때의 데이터 형태 알아야함 ***
-    user = userdb.users.find_one({'user_id': user_id}, {'user_pwd': user_pw})
-    # print(user is None)
-    if user is None:
-        return jsonify({'result': False})
-    # else:
-    # return jsonify({'result' : True})
-
-    access_token = create_access_token(identity=user_id, expires_delta=False)
-    refresh_token = create_refresh_token(identity=user_id)
-
-    resp = jsonify({'result': True})
-    # return resp
-    # # 서버에 저장
-    set_access_cookies(resp, access_token)
-    set_refresh_cookies(resp, refresh_token)
-
+@app.route("/main", methods=['GET'])
+def show_main():
+    access_token = request.headers.get("Authorization")
     print(access_token)
-    print()
-    print(refresh_token)
-    return resp
+    if access_token is not None:
+        try:
+            payload = JWT.decode_key_loader(access_token, current_app.config["JWT_SECRET_KEY"], "HS256")
+        except JWT.InvalidTokenError:
+                payload = None
+	
+        if payload is None:
+            return Response(status=401)
+        
+        user_id = payload["user_id"]
+        # g.user_id = user_id
+        # g.user = get_user_info(user_id) if user_id else None
+        print(user_id)
+    else:
+        return Response(status=401)
+    
+
+    return render_template('main.html')
+
+@app.route("/login", methods=['GET'])
+def login():
+
+    return render_template('login.html')
+
+
+
+@app.route("/test", methods=['GET'])
+def test():
+    result = validateToken(request.cookies)
+    if(result["state"]):
+        print(result['id'])
+        isvalid = "성공"
+
+    else:
+        print("실패")
+        isvalid = "실패"
+        
+    return render_template('testPage.html', jwtstate=isvalid)
+
+
+@app.route("/users/protected")
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    return jsonify(logged_in_as=current_user_id), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #전체 파티 리스트
 @app.route('/party', methods=['GET'])
@@ -142,8 +171,29 @@ def getPartyDetail(partyId):
     print(partyDetail)
     return render_template('partyDetail.html', partyDetail=partyDetail)
 
+
+
+
+
+
+
+
+
+
+def validateToken(cookies):
+    print("토큰검증")
+    access_token = cookies.get("access_token")
+    if access_token is not None:
+        # print(get_jwt_identity())
+        if access_token is not None:
+            try:
+                payload = decode_token(access_token)
+                print(payload)  
+                return {"state": True, "id": payload["sub"]}
+            except JWT.InvalidTokenError:
+                    return {"state": False}
+    else:
+         return {"state": False}
+
 if __name__ == '__main__':
     app.run()
-    # result = list(db.partyList.find({}, {'_id': 0}))
-    # db.party.insert_one({""})
-    # return jsonify({'result': 'success', 'parties': result})
