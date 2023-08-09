@@ -104,16 +104,11 @@ def test():
         
     return render_template('testPage.html', jwtstate=isvalid)
 
-
 # @app.route("/users/protected")
 # @jwt_required()
 # def protected():
 #     current_user_id = get_jwt_identity()
 #     return jsonify(logged_in_as=current_user_id), 200
-
-
-
-
 
 
 
@@ -124,14 +119,6 @@ def party_list():
     partyList = list(userdb.party.find({}))
     print(partyList)
     return render_template('partyList.html', partyList=partyList)
-
-#회원 파티 리스트
-@app.route('/myparty', methods=['GET'])
-def my_list():
-    # userInfo = userdb.userList.find_one({'userId': 'ididid'},{'_id':False})
-    # myPartyList = list(userdb.partyList.find({'userId': userInfo.userId},{'_id':False}))
-    myPartyList = list(userdb.userList.find({'userId': 'ididid'},{'_id':False}))
-    return render_template('myParty.html', myPartyList=myPartyList)
 
 
 # 파티 등록 페이지
@@ -159,18 +146,11 @@ def makeParty():
     closeDate = request.form['closeDate']
     chatUrl = request.form['chatUrl']
     content = request.form['content']
-    # print(title)
-    # print(people)
-    # print(time)
-    # print(startDate)
-    # print(endDate)
-    # print(closeDate)
-    # print(chatUrl)
-    # print(content)
-
+    user = validateToken(request.cookies)
+    userId = user['id']
 
     doc = {'title': title, 'people': people, 'startDate': startDate, 'endDate': endDate,
-           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0}
+           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0, 'userId': userId}
     userdb.party.insert_one(doc)
     return jsonify({'result': 'success'})
 
@@ -191,15 +171,17 @@ def getPartyDetail(partyId):
 @app.route('/join', methods=['POST'])
 def joinParty():
     partyId = request.values['partyId']
+    user = validateToken(request.cookies)
+    userId = user['id']
 
     # 사용자가 참가 신청했던 상태인지 확인
-    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
+    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": userId}]})
     if attendee:
         # 이미 신청한 참가자
         return jsonify({'result': 'joined'})
     else:
         # 새로운 참가자 insert
-        newAttendee = {'partyId': partyId, 'userId': '회원' }
+        newAttendee = {'partyId': partyId, 'userId': userId }
         userdb.attendees.insert_one(newAttendee)
 
         # 참가 인원 update
@@ -216,13 +198,15 @@ def joinParty():
 @app.route('/cancel', methods=['POST'])
 def cancelParty():
     partyId = request.values['partyId']
+    user = validateToken(request.cookies)
+    userId = user['id']
     # userdb.attendees.delete_many({"userId": '회원'})
 
     # 사용자가 참가 신청했던 상태인지 확인
-    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
+    attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": userId}]})
     if attendee:
         # 참여 취소 delete
-        userdb.attendees.delete_one({"$and": [{"partyId": partyId}, {"userId": '회원'}]})
+        userdb.attendees.delete_one({"$and": [{"partyId": partyId}, {"userId": userId}]})
 
         # 참가 인원 update
         condition = {"_id": ObjectId(partyId)}
@@ -234,6 +218,25 @@ def cancelParty():
     else:
         # 조건에 맞는 데이터 삭제
         return jsonify({'result': 'notJoin'})
+
+
+#파티장의 파티 리스트
+@app.route('/myparty', methods=['GET'])
+def host_list():
+    user = validateToken(request.cookies)
+    userId = user['id']
+    hostPartyList = list(userdb.party.find({'userId': userId}))
+    return render_template('myParty.html', hostPartyList=hostPartyList)
+
+
+#파티장의 파티 삭제
+@app.route('/delete', methods=['POST'])
+def delete_party():
+    partyId = request.values['partyId']
+    condition = {'_id': ObjectId(partyId)}
+
+    userdb.party.delete_one(condition)
+    return jsonify({'result': 'success'})
 
 
 #토큰 검증 함수
