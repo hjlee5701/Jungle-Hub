@@ -113,7 +113,7 @@ def test():
 @app.route('/party', methods=['GET'])
 def party_list():
     partyList = list(userdb.party.find({}))
-    # print(partyList)
+    print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
 
@@ -128,12 +128,13 @@ def option():
 @app.route('/party/register', methods=['GET'])
 def getResistForm():
     result = validateToken(request.cookies)
+
     if(result["state"]):
         print(result['id'])
 
     else:
-        print("실패")
-        return redirect("/")
+        # print("실패")
+        return redirect("/show_login_page")
     
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyRegister.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
@@ -165,17 +166,29 @@ def getPartyDetail(partyId):
     print(partyId)
     partyDetail = userdb.party.find_one({'_id': ObjectId(partyId)},{'_id':False})
     partyDetail['_id']= partyId
-    print(partyDetail)
-    return render_template('partyDetail.html', partyDetail=partyDetail)
+    # print(partyDetail)
+
+    participantList = list(userdb.attendees.find({'partyId':partyId}))
+    print(participantList)
+    participant = ""
+    for i in participantList:
+        participant += (" " + i['userId'] + ",")
+
+    return render_template('partyDetail.html', partyDetail=partyDetail, partyId=partyId, participant=participant)
 
 
 
 #파티 참가
 @app.route('/join', methods=['POST'])
 def joinParty():
+    result = validateToken(request.cookies)
+    if(result["state"]==False):
+        print("오류")
+        return jsonify({'result': 'notUser'})
+       
     partyId = request.values['partyId']
-    user = validateToken(request.cookies)
-    userId = user['id']
+  
+    userId = result['id']
 
     # 사용자가 참가 신청했던 상태인지 확인
     attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": userId}]})
@@ -228,11 +241,12 @@ def cancelParty():
 def host_list():
     result = validateToken(request.cookies)
     if(result['state'] == False):
-        return redirect("/")
+        print("로그인")
+        return redirect("/users/login")
 
     userId = result['id']
     hostPartyList = list(userdb.party.find({'userId': userId}))
-
+    hostPartyList.reverse()
     lbtn, sbtn,obtn = setUserArea(request)
     return render_template('myPage.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList, userId=userId)
 
@@ -281,14 +295,17 @@ def updateParty():
 @app.route('/myparty', methods=['GET'])
 def myParty():
     # attend
-    user = validateToken(request.cookies)
-    userId = user['id']
+    result = validateToken(request.cookies)
+    if(result['state']==False):
+        return redirect("/show_login_page")
+    userId = result['id']
     parties = list(userdb.attendees.find({'userId': userId}, {'_id': False}))
     
     party_ids = [ObjectId(party['partyId']) for party in parties]
     
     # party 컬렉션에서 partyId 리스트와 일치하는 파티 데이터 검색
     partyList = list(userdb.party.find({'_id': {'$in': party_ids}}))
+    partyList.reverse()
     print(len(partyList))
     lbtn, sbtn,obtn = setUserArea(request)
     return render_template('myParty.html',lbtn=lbtn, sbtn=sbtn,obtn=obtn, partyList=partyList, userId=userId)
@@ -322,7 +339,6 @@ def setUserArea(request):
         sbtn = 1
         obtn = 0
     return lbtn, sbtn, obtn
-
 
 
 if __name__ == '__main__':

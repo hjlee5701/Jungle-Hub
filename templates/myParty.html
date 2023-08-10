@@ -1,14 +1,17 @@
 {% extends "base.html" %}
+{% block title %}
+My Party
+{% endblock %}
 {% block content %}
 <div class="relative overflow-x-auto">
     <div style="display: flex; justify-content: space-between; align-items: end;">
         <h1 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-            {{userId}}
+            {{userId}} 님
             <span class="mt-6 font-extrabold text-gray-900 dark:text-white" style="font-size: 22px;">
-                's Joined Party
+                이 참여한 파티
             </span>
         </h1>
-        <a href="/mypage" class="text-green-600 hover:text-gray-800" style="font-weight: bold; font-size: 20px;"> > {{userId}}'s Party</a>
+        <a href="/mypage" class="text-green-600 hover:text-gray-800" style="font-weight: bold; font-size: 20px;"> > 생성 파티</a>
     </div>
     <hr>
     <br>
@@ -49,18 +52,5 @@
             {%endfor%}
         </tbody>
     </table>
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <a class="pagination-previous">Previous</a>
-        <a class="pagination-next">Next page</a>
-        <ul class="pagination-list">
-            <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-            <li><span class="pagination-ellipsis">&hellip;</span></li>
-            <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-            <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-            <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-            <li><span class="pagination-ellipsis">&hellip;</span></li>
-            <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-        </ul>
-    </nav>
 </div>
 {% endblock %}

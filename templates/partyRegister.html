@@ -50,7 +50,8 @@ Party register
                 },
                 success: function (response) {
                     console.log(response)
-                    window.location.assign('/');
+                    alert("새로운 파티가 등록되었습니다!")
+                    location.href = "/";
                 }
             })
         }
