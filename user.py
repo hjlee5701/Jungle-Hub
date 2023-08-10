@@ -21,7 +21,7 @@ class UserRegisterResource(Resource):
         #     "password": "1234"
         # }
         data = request.get_json()
-        print(data)
+        print(data)                 
 
         # 이메일 주소 형식 확인, email_validator 사용
         try:
@@ -29,13 +29,19 @@ class UserRegisterResource(Resource):
         except EmailNotValidError as e:
             # email is not valid, exception message is human-readable
             print(str(e))
-            return {'error': str(e)}, 400
+            return {'error': "유효하지 않은 이메일 입니다."}
         
-        #중복 거부
+        #중복 이메일 거부
         dupCheck = db.users.find_one({"email":data['email']})
         print(dupCheck)
         if(dupCheck!=None):
-            return {"error": "중복 계정입니다."}
+            return {"error": "중복 이메일 입니다."}
+        
+        #중복 아이디 거부
+        dupCheck = db.users.find_one({"id":data['username']})
+        print(dupCheck)
+        if(dupCheck!=None):
+            return {"error": "중복 아이디 입니다."}
             
 
         

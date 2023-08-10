@@ -124,8 +124,8 @@ def getResistForm():
         print(result['id'])
 
     else:
-        print("실패")
-        return redirect("/")
+        # print("실패")
+        return redirect("/show_login_page")
     
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyRegister.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
@@ -158,17 +158,22 @@ def getPartyDetail(partyId):
     print(partyId)
     partyDetail = userdb.party.find_one({'_id': ObjectId(partyId)},{'_id':False})
     partyDetail['_id']= partyId
-    print(partyDetail)
-    return render_template('partyDetail.html', partyDetail=partyDetail)
+    # print(partyDetail)
+    return render_template('partyDetail.html', partyDetail=partyDetail, partyId=partyId)
 
 
 
 #파티 참가
 @app.route('/join', methods=['POST'])
 def joinParty():
+    result = validateToken(request.cookies)
+    if(result["state"]==False):
+        print("오류")
+        return jsonify({'result': 'notUser'})
+       
     partyId = request.values['partyId']
-    user = validateToken(request.cookies)
-    userId = user['id']
+  
+    userId = result['id']
 
     # 사용자가 참가 신청했던 상태인지 확인
     attendee = userdb.attendees.find_one({"$and": [{"partyId": partyId}, {"userId": userId}]})
@@ -221,7 +226,8 @@ def cancelParty():
 def host_list():
     result = validateToken(request.cookies)
     if(result['state'] == False):
-        return redirect("/")
+        print("로그인")
+        return redirect("/users/login")
 
     userId = result['id']
     hostPartyList = list(userdb.party.find({'userId': userId}))
@@ -274,8 +280,10 @@ def updateParty():
 @app.route('/myparty', methods=['GET'])
 def myParty():
     # attend
-    user = validateToken(request.cookies)
-    userId = user['id']
+    result = validateToken(request.cookies)
+    if(result['state']==False):
+        return redirect("/show_login_page")
+    userId = result['id']
     parties = list(userdb.attendees.find({'userId': userId}, {'_id': False}))
     
     party_ids = [ObjectId(party['partyId']) for party in parties]
@@ -315,7 +323,6 @@ def setUserArea(request):
         sbtn = 1
         obtn = 0
     return lbtn, sbtn, obtn
-
 
 
 if __name__ == '__main__':
