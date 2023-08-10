@@ -23,14 +23,17 @@
     <br>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-s text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr class="py-3">
-                <th scope="col-6" class="py-3 bg-gray-100">
+            <tr class="py-3 px-1">
+                <th style="width: 20px;">
+                    No
+                </th>
+                <th scope="col-5" class="py-3 bg-gray-100">
                     제목
                 </th>
                 <th scope="col-1" class="py-3">
                     인원
                 </th>
-                <th scope="col-2" class="py-3 bg-gray-100">
+                <th scope="col-1" class="py-3 bg-gray-100">
                     파티장
                 </th>
                 <th scope="col-1" class="py-3">
@@ -39,25 +42,28 @@
             </tr>
         </thead>
         <tbody>
-            <!-- _id, title, people, time, startDate, endDate, closeDate, chatUrl, content -->
-
-            {% for party in partyList %}
+            {% for data in datas %}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="py-4" style="width: 20px;">{{loop.index + (page - 1) * limit}}</td>
                 <td class="w-2/6 py-4 font-medium text-gray-900" style="text-indent: 20px;">
-                    <a href="{{ url_for('getPartyDetail', partyId=party._id) }}">{{party.title}}</a>
+                    <a href="{{ url_for('getPartyDetail', partyId=data._id) }}">{{data.title}}</a>
                 </td>
                 <td class="w-1/6 text-center">
-                    {{party.member}}/{{party.people}}
+                    {{data.member}}/{{data.people}}
                 </td>
                 <td class="w-2/6 text-center">
-                    {{party.userId}}
+                    {{data.userId}}
                 </td>
                 <td class="w-1/6 text-center">
-                    {{party.closeDate}}
+                    {{data.closeDate}}
                 </td>
             </tr>
             {%endfor%}
         </tbody>
     </table>
+
+    {% include 'pagination.html' %}
+
 </div>
+
 {% endblock %}

@@ -13,6 +13,7 @@ from flask_jwt_extended import decode_token, get_jwt_identity, jwt_required
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import math
 
 client = MongoClient('mongodb://test:test@13.125.225.182',27017)
 userdb = client.userdb
@@ -115,7 +116,40 @@ def party_list():
     partyList = list(userdb.party.find({}))
     print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
-    return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
+
+    partyBoard = userdb.party
+    # 페이지 값 (디폴트값 = 1)
+    page = request.args.get("page", 1, type=int)
+    # 한 페이지 당 몇 개의 게시물을 출력할 것인가
+    limit = 10
+
+    datas = partyBoard.find({}).skip((page - 1) * limit).limit(limit).sort([("_id", -1)])
+
+
+    # 게시물의 총 개수 세기
+    tot_count = partyBoard.count_documents({})
+    # 마지막 페이지의 수 구하기
+    last_page_num = math.ceil(tot_count / limit) # 반드시 올림을 해줘야함
+
+    # 페이지 블럭을 5개씩 표기
+    block_size = 5
+    # 현재 블럭의 위치 (첫 번째 블럭이라면, block_num = 0)
+    block_num = int((page - 1) / block_size)
+    # 현재 블럭의 맨 처음 페이지 넘버 (첫 번째 블럭이라면, block_start = 1, 두 번째 블럭이라면, block_start = 6)
+    block_start = (block_size * block_num) + 1
+    # 현재 블럭의 맨 끝 페이지 넘버 (첫 번째 블럭이라면, block_end = 5)
+    block_end = block_start + (block_size - 1)
+
+    return render_template(
+        "partyList.html",
+        datas=datas,
+        limit=limit,
+        page=page,
+        block_start=block_start,
+        block_end=block_end,
+        last_page_num=last_page_num,
+        lbtn=lbtn, sbtn=sbtn, obtn=obtn
+        )
 
 @app.route('/option',methods=['POST'])
 def option():
@@ -245,9 +279,45 @@ def host_list():
         return redirect("/users/login")
 
     userId = result['id']
-    hostPartyList = list(userdb.party.find({'userId': userId}))
-    hostPartyList.reverse()
+    # hostPartyList = list(userdb.party.find({'userId': userId}))
+    # hostPartyList.reverse()
     lbtn, sbtn,obtn = setUserArea(request)
+
+
+    partyBoard = userdb.party
+    # 페이지 값 (디폴트값 = 1)
+    page = request.args.get("page", 1, type=int)
+    # 한 페이지 당 몇 개의 게시물을 출력할 것인가
+    limit = 10
+
+    datas = partyBoard.find({'userId': userId}).skip((page - 1) * limit).limit(limit).sort([("_id", -1)])  # board컬럭션에 있는 모든 데이터를 가져옴
+
+    # 게시물의 총 개수 세기
+    tot_count = partyBoard.count_documents({})
+    # 마지막 페이지의 수 구하기
+    last_page_num = math.ceil(tot_count / limit) # 반드시 올림을 해줘야함
+
+    # 페이지 블럭을 5개씩 표기
+    block_size = 5
+    # 현재 블럭의 위치 (첫 번째 블럭이라면, block_num = 0)
+    block_num = int((page - 1) / block_size)
+    # 현재 블럭의 맨 처음 페이지 넘버 (첫 번째 블럭이라면, block_start = 1, 두 번째 블럭이라면, block_start = 6)
+    block_start = (block_size * block_num) + 1
+    # 현재 블럭의 맨 끝 페이지 넘버 (첫 번째 블럭이라면, block_end = 5)
+    block_end = block_start + (block_size - 1)
+
+    return render_template(
+        "myPage.html",
+        datas=datas,
+        limit=limit,
+        page=page,
+        block_start=block_start,
+        block_end=block_end,
+        last_page_num=last_page_num,
+        lbtn=lbtn, sbtn=sbtn, obtn=obtn,
+        userId=userId
+        )
+
     return render_template('myPage.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList, userId=userId)
 
 
@@ -308,7 +378,42 @@ def myParty():
     partyList.reverse()
     print(len(partyList))
     lbtn, sbtn,obtn = setUserArea(request)
-    return render_template('myParty.html',lbtn=lbtn, sbtn=sbtn,obtn=obtn, partyList=partyList, userId=userId)
+
+
+
+    partyBoard = userdb.party
+    # 페이지 값 (디폴트값 = 1)
+    page = request.args.get("page", 1, type=int)
+    # 한 페이지 당 몇 개의 게시물을 출력할 것인가
+    limit = 10
+
+    datas = partyBoard.find({'_id': {'$in': party_ids}}).skip((page - 1) * limit).limit(limit).sort([("_id", -1)])  # board컬럭션에 있는 모든 데이터를 가져옴
+
+    # 게시물의 총 개수 세기
+    tot_count = partyBoard.count_documents({})
+    # 마지막 페이지의 수 구하기
+    last_page_num = math.ceil(tot_count / limit) # 반드시 올림을 해줘야함
+
+    # 페이지 블럭을 5개씩 표기
+    block_size = 5
+    # 현재 블럭의 위치 (첫 번째 블럭이라면, block_num = 0)
+    block_num = int((page - 1) / block_size)
+    # 현재 블럭의 맨 처음 페이지 넘버 (첫 번째 블럭이라면, block_start = 1, 두 번째 블럭이라면, block_start = 6)
+    block_start = (block_size * block_num) + 1
+    # 현재 블럭의 맨 끝 페이지 넘버 (첫 번째 블럭이라면, block_end = 5)
+    block_end = block_start + (block_size - 1)
+
+    return render_template(
+        "myParty.html",
+        datas=datas,
+        limit=limit,
+        page=page,
+        block_start=block_start,
+        block_end=block_end,
+        last_page_num=last_page_num,
+        lbtn=lbtn, sbtn=sbtn, obtn=obtn,
+        userId=userId
+    )
 
 
 #토큰 검증 함수

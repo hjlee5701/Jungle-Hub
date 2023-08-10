@@ -34,23 +34,24 @@ My Party
             </tr>
         </thead>
         <tbody>
-            {% for party in partyList %}
+            {% for data in datas %}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <td class="w-2/6 py-4 font-medium text-gray-900" style="text-indent: 20px;">
-                    <a href="{{ url_for('getPartyDetail', partyId=party._id) }}">{{party.title}}</a>
+                    <a href="{{ url_for('getPartyDetail', partyId=data._id) }}">{{data.title}}</a>
                 </td>
                 <td class="w-1/6 text-center">
-                    {{party.member}}/{{party.people}}
+                    {{data.member}}/{{data.people}}
                 </td>
                 <td class="w-2/6 text-center">
-                    {{party.userId}}
+                    {{data.userId}}
                 </td>
                 <td class="w-1/6 text-center">
-                    {{party.closeDate}}
+                    {{data.closeDate}}
                 </td>
             </tr>
             {%endfor%}
         </tbody>
     </table>
+    {% include 'pagination.html' %}
 </div>
 {% endblock %}
