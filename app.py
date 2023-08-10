@@ -15,7 +15,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://test:test@13.125.225.182',27017)
-userdb = cylient.userdb
+userdb = client.userdb
 
 # API 서버를 구축하기 위한 기본 구조
 app = Flask(__name__)
