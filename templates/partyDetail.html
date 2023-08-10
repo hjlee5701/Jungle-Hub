@@ -40,11 +40,17 @@
             success: function(res) {
                 if(res['result'] == 'success'){
                     alert('참가 완료!');
+                    location.href = '/detail/{{partyId}}';
                 }else if(res['result'] == 'joined'){
                     alert('신청한 사용자 입니다.');
+                }else if(res['result']== 'notUser'){
+                    alert('회원이 아닙니다.')
+                    location.href = "/show_login_page";
                 }else{
                     alert('오류!')
                 }
+
+                
             }
         });
         }
@@ -58,8 +64,8 @@
                     alert('참가 취소!');
                 }else if(res['result'] == 'notJoin'){
                     alert('신청하지 않은 사용자 입니다.');
-                }else{
-                    alert('오류!')
+                }else if(res['result']== 'notUser'){
+                    alert('회원이 아닙니다.')
                 }
             }
         });
@@ -114,7 +120,7 @@
                         </div>
                         <div style="margin: 0 auto; width: 200px">
                             <div style="display: flex; justify-content: space-between;">
-                                <button class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800"
+                                <button type="button" class="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800"
                                     onclick="joinParty(`{{partyDetail._id}}`, `{{partyDetail.member}}`, `{{partyDetail.people}}`)">
                                     참가하기
                                 </button>
