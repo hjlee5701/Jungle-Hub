@@ -14,7 +14,7 @@ from flask_jwt_extended import decode_token, get_jwt_identity, jwt_required
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.225.182',27017)
 userdb = client.userdb
 
 # API 서버를 구축하기 위한 기본 구조
@@ -45,8 +45,9 @@ api.add_resource(UserLogoutResource, '/users/logout')  # 로그아웃
 
 @app.route('/')
 def home():  # put application's code here
+    parties = list(userdb.party.find({}))[:5]
     lbtn, sbtn,obtn = setUserArea(request)
-    return render_template('index.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn)
+    return render_template('index.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, parties=parties)
 
 
 @app.route("/main", methods=['GET'])
@@ -112,10 +113,16 @@ def test():
 @app.route('/party', methods=['GET'])
 def party_list():
     partyList = list(userdb.party.find({}))
-    # print(partyList)
-    partyList.reverse()
+    print(partyList)
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
+
+@app.route('/option',methods=['POST'])
+def option():
+    val1 = request.form.get('op')
+    val2 = request.form.get('category')
+
+    print(val1,val2)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
@@ -146,9 +153,8 @@ def makeParty():
     content = request.form['content']
     user = validateToken(request.cookies)
     userId = user['id']
-
     doc = {'title': title, 'people': people, 'startDate': startDate, 'endDate': endDate,
-           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0, 'userId': userId}
+           "closeDate": closeDate, 'chatUrl': chatUrl, 'content': content, 'member': 0, 'userId': userId, 'page_num':len(list(userdb.party.find({})))//10}
     userdb.party.insert_one(doc)
     return jsonify({'result': 'success'})
 
@@ -336,4 +342,4 @@ def setUserArea(request):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0',port=5000,debug=True)
