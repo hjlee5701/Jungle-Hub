@@ -293,7 +293,8 @@ def host_list():
     datas = partyBoard.find({'userId': userId}).skip((page - 1) * limit).limit(limit).sort([("_id", -1)])  # board컬럭션에 있는 모든 데이터를 가져옴
 
     # 게시물의 총 개수 세기
-    tot_count = partyBoard.count_documents({})
+    tot_count= partyBoard.count_documents({'userId': userId})
+    # tot_count = datas.count_documents({})
     # 마지막 페이지의 수 구하기
     last_page_num = math.ceil(tot_count / limit) # 반드시 올림을 해줘야함
 
@@ -390,7 +391,8 @@ def myParty():
     datas = partyBoard.find({'_id': {'$in': party_ids}}).skip((page - 1) * limit).limit(limit).sort([("_id", -1)])  # board컬럭션에 있는 모든 데이터를 가져옴
 
     # 게시물의 총 개수 세기
-    tot_count = partyBoard.count_documents({})
+    tot_count= partyBoard.count_documents({'_id': {'$in': party_ids}})
+    # tot_count = partyBoard.count_documents({})
     # 마지막 페이지의 수 구하기
     last_page_num = math.ceil(tot_count / limit) # 반드시 올림을 해줘야함
 
