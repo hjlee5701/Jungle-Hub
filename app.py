@@ -159,7 +159,14 @@ def getPartyDetail(partyId):
     partyDetail = userdb.party.find_one({'_id': ObjectId(partyId)},{'_id':False})
     partyDetail['_id']= partyId
     # print(partyDetail)
-    return render_template('partyDetail.html', partyDetail=partyDetail, partyId=partyId)
+
+    participantList = list(userdb.attendees.find({'partyId':partyId}))
+    print(participantList)
+    participant = ""
+    for i in participantList:
+        participant += (" " + i['userId'] + ",")
+
+    return render_template('partyDetail.html', partyDetail=partyDetail, partyId=partyId, participant=participant)
 
 
 
