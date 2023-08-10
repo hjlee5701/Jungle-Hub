@@ -15,7 +15,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://test:test@13.125.225.182',27017)
-userdb = client.userdb
+userdb = cylient.userdb
 
 # API 서버를 구축하기 위한 기본 구조
 app = Flask(__name__)
@@ -119,8 +119,10 @@ def party_list():
 
 @app.route('/option',methods=['POST'])
 def option():
-    val = request.form.get()
-    print(val)
+    val1 = request.form.get('op')
+    val2 = request.form.get('category')
+
+    print(val1,val2)
 
 # 파티 등록 페이지
 @app.route('/party/register', methods=['GET'])
