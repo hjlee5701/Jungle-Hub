@@ -112,7 +112,8 @@ def test():
 @app.route('/party', methods=['GET'])
 def party_list():
     partyList = list(userdb.party.find({}))
-    print(partyList)
+    # print(partyList)
+    partyList.reverse()
     lbtn, sbtn, obtn = setUserArea(request)
     return render_template('partyList.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, partyList=partyList)
 
@@ -120,6 +121,7 @@ def party_list():
 @app.route('/party/register', methods=['GET'])
 def getResistForm():
     result = validateToken(request.cookies)
+
     if(result["state"]):
         print(result['id'])
 
@@ -238,7 +240,7 @@ def host_list():
 
     userId = result['id']
     hostPartyList = list(userdb.party.find({'userId': userId}))
-
+    hostPartyList.reverse()
     lbtn, sbtn,obtn = setUserArea(request)
     return render_template('myPage.html', lbtn=lbtn, sbtn=sbtn, obtn=obtn, hostPartyList=hostPartyList, userId=userId)
 
@@ -297,6 +299,7 @@ def myParty():
     
     # party 컬렉션에서 partyId 리스트와 일치하는 파티 데이터 검색
     partyList = list(userdb.party.find({'_id': {'$in': party_ids}}))
+    partyList.reverse()
     print(len(partyList))
     lbtn, sbtn,obtn = setUserArea(request)
     return render_template('myParty.html',lbtn=lbtn, sbtn=sbtn,obtn=obtn, partyList=partyList, userId=userId)
